@@ -4,11 +4,15 @@ import { getIndexList } from '../store/index';
 const Index = (props) => {
     useEffect(() => {
         //获取数据
-        props.getIndexList()
+        if (props.list.length == 0) {
+            props.getIndexList()
+        }
     }, [])
     return (
         <div>
-            我是首页
+            <p>
+                我是首页
+            </p>
             <ul>
                 {
                     props.list.map(item => {
@@ -19,8 +23,11 @@ const Index = (props) => {
         </div>
     )
 }
-
-
+// loadDate 组件的服务端加载方法
+Index.loadData = (store) => {
+    //服务端渲染，dispatch
+    return store.dispatch(getIndexList())
+}
 export default connect(
     state => ({ list: state.index.list }),
     { getIndexList }

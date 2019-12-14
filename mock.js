@@ -20,6 +20,19 @@ app.get('/api/course/list', (req, res) => {
         { txt: 'Node', id: 4 },
     ])
 })
+app.get('/api/userinfo', (req, res) => {
+    //支持跨域
+    res.header("Access-Control-Allow-Origin", "*");
+    //支持方法
+    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
+    //请求格式
+    res.header("Content-Type", "appliction/json;charet=utf-8")
+
+    res.json({
+        name: 'yunfei',
+        age: '111'
+    })
+})
 app.listen(9090, () => {
     console.log('mock启动完毕！ ')
 })

@@ -4,16 +4,18 @@
  */
 import React from 'react';
 import ReactDom from 'react-dom';
-import App from '../src/App';
-import { BrowserRouter } from 'react-router-dom';
+import Routes from '../src/App';
+import Header from '../src/components/Header';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import Store from '../src/store/store';
+import {getClientStore} from '../src/store/store';
 // react针对于服务端提供注入js接口 hydrate
 
 const Page = (
-    <Provider store={Store}>
+    <Provider store={getClientStore()}>
         <BrowserRouter>
-            {App}
+            <Header />
+            {Routes.map(e => <Route {...e}></Route>)}
         </BrowserRouter>
     </Provider>
 )

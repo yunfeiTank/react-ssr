@@ -1,37 +1,69 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { StaticRouter } from 'react-router-dom';
+import Header from '../src/components/Header';
+import Http from './util/http';
+/* 
+*获取组件属性 matchPath 判断当前 component是否匹配到
+*/
+import { StaticRouter, matchPath, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import Store from '../src/store/store';
+import { getServerStore } from '../src/store/store';
 import express from 'express';
-import App from '../src/App';
+import routes from '../src/App';
+
 
 const app = express();
+const store = getServerStore();
 //静态资源目录
 app.use(express.static('public'))
 //监听所有router--防止404错误
 app.get('*', (req, res) => {
-    //解析react虚拟dom为节点字符串
-    //服务器端路由使用StaticRouter
-    const content = renderToString(
-        <Provider store={Store}>
-            <StaticRouter>
-                {App}
-            </StaticRouter>
-        </Provider>
-    );
-    res.send(`
-        <html>
-            <head>
-                <meta charset="utf-8" />
-                <title>ssr</title>
-                <body>
-                    <div id='root'>${content}</div>
-                    <script src='/bundle.js'></script>
-                </body>
-            </head>
-        </html>
-    `)
+    //存储当前匹配到的路由
+    const promises = []
+    routes.some(route => {
+        const match = matchPath(req.path, route)
+        if (match && route.component.loadData) {
+            promises.push(
+                new Promise((resolve, rejects) => {
+                    route.component.loadData(store).then(_res => resolve(res)).catch(err => resolve(err))
+                })
+            )
+        } else {
+            // console.log(req.path, '没有')
+            //！route与静态资源，转发请求
+            // console.log('方法',req.method)
+            Http[req.method](req.path,res)
+        }
+    })
+    // 执行promises内的所有loadDate；并等待响应
+    Promise.all(promises).then((data) => {
+        //解析react虚拟dom为节点字符串
+        //服务器端路由使用StaticRouter
+        const content = renderToString(
+            <Provider store={store}>
+                <StaticRouter>
+                    <Header />
+                    {routes.map(e => <Route {...e} ></Route>)}
+                </StaticRouter>
+            </Provider>
+        );
+        res.send(`
+            <html>
+                <head>
+                    <meta charset="utf-8" />
+                    <title>ssr</title>
+                </head>
+                    <body>
+                        <div id='root'>${content}</div>
+                        <script>window._context = ${JSON.stringify(store.getState())}</script>
+                        <script src='/bundle.js'></script>
+                    </body>
+            </html>
+        `)
+    }).catch(() => {
+        res.send('404界面')
+    })
+
 })
 app.listen(3000, () => {
     console.log('启动完成')
