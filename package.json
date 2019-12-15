@@ -8,7 +8,7 @@
     "dev:client": "webpack --config webpack.client.js --watch",
     "dev:server": "webpack --config webpack.server.js --watch",
     "dev:start": "nodemon --watch build --exec node \"./build/bundle.js\"",
-    "start": "concurrently \"cnpm run dev:client\" \"cnpm run dev:server\" \"cnpm run dev:start\"" 
+    "start": "concurrently \"cnpm run dev:client\" \"npm run dev:server\" \"npm run dev:start\"" 
   },
   "author": "",
   "license": "ISC",
