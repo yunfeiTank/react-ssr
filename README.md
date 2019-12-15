@@ -7,11 +7,11 @@
 * 集成redux
 
 - 原理
-![](img/1.png)
+![原理](img/1.png)
 
 -  client与server中的route问题
-![](img/2.png)
+![router](img/2.png)
 
 - ssr数据流
-![](img/3.png)
-![](img/4.png)
+![store](img/3.png)
+![store](img/4.png)
