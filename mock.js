@@ -6,12 +6,12 @@ const express = require('express');
 const app = express();
 
 app.get('/api/course/list', (req, res) => {
-    //支持跨域
-    res.header("Access-Control-Allow-Origin", "*");
-    //支持方法
-    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
-    //请求格式
-    res.header("Content-Type", "appliction/json;charet=utf-8")
+    // //支持跨域
+    // res.header("Access-Control-Allow-Origin", "*");
+    // //支持方法
+    // res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
+    // //请求格式
+    // res.header("Content-Type", "appliction/json;charet=utf-8")
 
     res.json([
         { txt: 'Web全栈', id: 1 },
@@ -21,12 +21,12 @@ app.get('/api/course/list', (req, res) => {
     ])
 })
 app.get('/api/userinfo', (req, res) => {
-    //支持跨域
-    res.header("Access-Control-Allow-Origin", "*");
-    //支持方法
-    res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
-    //请求格式
-    res.header("Content-Type", "appliction/json;charet=utf-8")
+    // //支持跨域
+    // res.header("Access-Control-Allow-Origin", "*");
+    // //支持方法
+    // res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
+    // //请求格式
+    // res.header("Content-Type", "appliction/json;charet=utf-8")
 
     res.json({
         name: 'yunfei',
