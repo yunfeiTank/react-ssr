@@ -4,12 +4,12 @@ const base = axios.create({
 });
 const Http = {
     'POST': () => base.post(),
-    'GET': (url, res) => base.get(url)
+    'GET': (url, params, res) => base.get(url)
         .then(function (data) {
-            res(data);
+            res.send(data.data);
         })
         .catch(function (error) {
-            console.log(url);
+            res.send(error);
         })
 }
 export default Http;

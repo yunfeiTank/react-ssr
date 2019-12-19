@@ -2,6 +2,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import Header from '../src/components/Header';
 import Http from './util/http';
+import axios from 'axios';
 /* 
 *获取组件属性 matchPath 判断当前 component是否匹配到
 */
@@ -10,12 +11,15 @@ import { Provider } from 'react-redux';
 import { getServerStore } from '../src/store/store';
 import express from 'express';
 import routes from '../src/App';
-
-
 const app = express();
 const store = getServerStore();
 //静态资源目录
+
 app.use(express.static('public'))
+app.get('/api/*', (req, res) => {
+    console.log(req.param)
+    Http[req.method](req.path,req.params, res)
+})
 //监听所有router--防止404错误
 app.get('*', (req, res) => {
     //存储当前匹配到的路由
@@ -28,11 +32,6 @@ app.get('*', (req, res) => {
                     route.component.loadData(store).then(_res => resolve(res)).catch(err => resolve(err))
                 })
             )
-        } else {
-            // console.log(req.path, '没有')
-            //！route与静态资源，转发请求
-            // console.log('方法',req.method)
-            Http[req.method](req.path,res)
         }
     })
     // 执行promises内的所有loadDate；并等待响应
