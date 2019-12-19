@@ -2,7 +2,7 @@
  * description: reducer
  * author；yunfei
  */
-import axios from 'axios';
+// import axios from 'axios';
 //actionType
 const GET_LIST = 'INDEX/GET/LIST';
 //ActionCreators
@@ -12,9 +12,9 @@ const changeList = list => ({
 });
 //dispatch
 export const getIndexList = server => {
-    return (dispatch, getState, axiosIntance) => {
+    return (dispatch, getState, $axios) => {
         //数据
-        return axios.get('http://localhost:9090/api/course/list').then(res => {
+        return $axios.get('api/course/list').then(res => {
             const list = res.data;
             dispatch(changeList(list));
         })

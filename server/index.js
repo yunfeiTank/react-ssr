@@ -4,7 +4,7 @@ import Header from '../src/components/Header';
 /* 
 *获取组件属性 matchPath 判断当前 component是否匹配到
 */
-import { StaticRouter, matchPath, Route } from 'react-router-dom';
+import { StaticRouter, matchPath, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { getServerStore } from '../src/store/store';
 import express from 'express';
@@ -37,17 +37,30 @@ app.get('*', (req, res) => {
             }
         }
     })
+    // 匹配错误界面（重定向界面）
+    const context = {}
     // 执行promises内的所有loadDate；并等待响应
     Promise.all(promises).then((data) => {
         //服务器端路由使用StaticRouter 解析react虚拟dom为节点字符串
         const content = renderToString(
-            <Provider store={store}>
-                <StaticRouter>
+            <Provider store={store} >
+                <StaticRouter location={req.url} context={context}>
                     <Header />
-                    {routes.map(e => <Route {...e} ></Route>)}
+                    <Switch>
+                        {routes.map(e => <Route {...e} ></Route>)}
+                    </Switch>
                 </StaticRouter>
             </Provider>
         );
+
+        //错误状态码
+        if (context.statusCode) {
+            res.status(context.statusCode)
+        }
+        //重定向
+        if (context.action == "REPLACE") {
+            res.redirect(301, context.url);
+          }
         res.send(`
             <html>
                 <head>
