@@ -1,6 +1,7 @@
 /**
- * description:客户端入口文件;包含 router与redux
- * author：yunfei 
+ * @description:客户端入口文件;包含 router与redux
+ * @author：yunfei 
+ * @time : 2019/12/10
  */
 import React from 'react';
 import ReactDom from 'react-dom';
@@ -21,7 +22,11 @@ const Page = (
         </BrowserRouter>
     </Provider>
 )
+if (window._context) {
+    //ssr 存在 server端
+    ReactDom.hydrate(Page, document.getElementById('root'));
+} else {
+    ReactDom.render(Page, document.getElementById('root'));
 
-
-ReactDom.hydrate(Page, document.getElementById('root'));
+}
 

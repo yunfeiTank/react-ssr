@@ -5,7 +5,6 @@ import About from './container/about';
 import User from './container/user';
 import Redire from './container/redire';
 import Notfound from './container/Notfound';
-import './App.css'
 
 export default [
     {
